@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 3px;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="https://cdn.firebase.com/js/client/1.0.3/firebase.js"></script>
+<script>
+
+var data = [];
+
+var dataRef = new Firebase("https://sns-rating.firebaseio.com");
+dataRef.once("value", function(snap) {
+    var val = snap.val();
+    for (var key in val) {
+        data.push({
+            "date": key,
+            "rating": val[key]
+        });
+    }
+
+    draw();
+});
+
+var draw = function() {
+    var margin = {top: 20, right: 80, bottom: 30, left: 50},
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+
+    var x = d3.time.scale()
+        .range([0, width]);
+
+    var y = d3.scale.linear()
+        .range([height, 0]);
+
+    var color = d3.scale.category10();
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left");
+
+    var line = d3.svg.line()
+        .interpolate("step-after")
+        .x(function(d) { return x(d.date); })
+        .y(function(d) { return y(d.rating); })
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    x.domain(d3.extent(data, function(d) { return d.date; }));
+    y.domain([0, 100]);
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("Numbers");
+
+    var rating_1star = data.map(function(d) {
+        return {date: d.date, rating: d.rating[1]};
+    });
+
+    svg.append("path")
+        .attr("class", "line")
+        .attr("d", line(rating_1star))
+        .style("stroke", "#ff6f31");
+
+    var rating_2star = data.map(function(d) {
+        return {date: d.date, rating: d.rating[2]};
+    });
+
+    svg.append("path")
+        .attr("class", "line")
+        .attr("d", line(rating_2star))
+        .style("stroke", "#ff9f02");
+
+    var rating_3star = data.map(function(d) {
+        return {date: d.date, rating: d.rating[3]};
+    });
+
+    svg.append("path")
+        .attr("class", "line")
+        .attr("d", line(rating_3star))
+        .style("stroke", "#ffcf02");
+
+    var rating_4star = data.map(function(d) {
+        return {date: d.date, rating: d.rating[4]};
+    });
+
+    svg.append("path")
+        .attr("class", "line")
+        .attr("d", line(rating_4star))
+        .style("stroke", "#99cc00");
+
+    var rating_5star = data.map(function(d) {
+        return {date: d.date, rating: d.rating[5]};
+    });
+
+    svg.append("path")
+        .attr("class", "line")
+        .attr("d", line(rating_5star))
+        .style("stroke", "#88b131");
+}
+
+</script>
