@@ -32,7 +32,7 @@ body {
 var data = [];
 
 var dataRef = new Firebase("https://sns-rating.firebaseio.com");
-dataRef.once("value", function(snap) {
+dataRef.on("value", function(snap) {
     var val = snap.val();
     for (var key in val) {
         data.push({
