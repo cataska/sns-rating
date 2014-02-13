@@ -77,7 +77,7 @@ var draw = function() {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     x.domain(d3.extent(data, function(d) { return d.date; }));
-    y.domain([0, 100]);
+    y.domain([0, d3.max(data, function(d) { return d.rating[5]; })]);
 
     svg.append("g")
         .attr("class", "x axis")
