@@ -33,6 +33,8 @@ var data = [];
 
 var dataRef = new Firebase("https://sns-rating.firebaseio.com");
 dataRef.on("value", function(snap) {
+    d3.selectAll("svg").remove();
+
     var val = snap.val();
     for (var key in val) {
         data.push({
@@ -45,8 +47,6 @@ dataRef.on("value", function(snap) {
 });
 
 var draw = function() {
-    d3.selectAll("svg").remove();
-
     var margin = {top: 20, right: 80, bottom: 30, left: 50},
         width = 960 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
