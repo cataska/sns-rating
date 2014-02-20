@@ -41,7 +41,7 @@ dataRef.on \value ->
 
   draw!
 
-draw = ->
+draw = !->
   margin =
     top: 20
     right: 80
@@ -96,45 +96,14 @@ draw = ->
     .style \text-anchor \end
     .text \Numbers
 
-  # 1 star
-  rating_1star = data.map -> {date: it.date, rating: it.rating[1]}
-
-  svg.append \path
-    .attr \class \line
-    .attr \d line rating_1star
-    .style \stroke \#ff6f31
-
-  # 2 star
-  rating_2star = data.map -> {date: it.date, rating: it.rating[2]}
-
-  svg.append \path
-    .attr \class \line
-    .attr \d line rating_2star
-    .style \stroke \#ff9f02
-
-  # 3 star
-  rating_3star = data.map -> {date: it.date, rating: it.rating[3]}
-
-  svg.append \path
-    .attr \class \line
-    .attr \d line rating_3star
-    .style \stroke \#ffcf02
-
-  # 4 star
-  rating_4star = data.map -> {date: it.date, rating: it.rating[4]}
-
-  svg.append \path
-    .attr \class \line
-    .attr \d line rating_4star
-    .style \stroke \#99cc00
-
-  # 5 star
-  rating_5star = data.map -> {date: it.date, rating: it.rating[5]}
-
-  svg.append \path
-    .attr \class \line
-    .attr \d line rating_5star
-    .style \stroke \#88b131
+  colors = <[ 0 #ff6f31 #ff9f02 #ffcf02 #99cc00 #88b131 ]>
+  for c, i in colors
+    unless c == \0
+      f = data.map -> {date: it.date, rating: it.rating[i]}
+      svg.append \path
+        .attr \class \line
+        .attr \d line f
+        .style \stroke c
 
 </script>
 <script src="livescript.js"></script>
