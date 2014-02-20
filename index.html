@@ -35,6 +35,7 @@ var dataRef = new Firebase("https://sns-rating.firebaseio.com");
 dataRef.on("value", function(snap) {
     d3.selectAll("svg").remove();
 
+    data = [];
     var val = snap.val();
     for (var key in val) {
         data.push({
